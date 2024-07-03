@@ -1,13 +1,32 @@
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import "./app.css";
+
+const serverFunction = (count: number) => {
+  "use server";
+
+  console.log("server", count);
+};
+
+const normalFunction = (count: number) => {
+  console.log("normal", count);
+};
 
 export default function App() {
   const [count, setCount] = createSignal(0);
 
+  createEffect(() => {
+    serverFunction(count());
+    normalFunction(count());
+  });
+
   return (
     <main>
       <h1>Hello world!</h1>
-      <button class="increment" onClick={() => setCount(count() + 1)} type="button">
+      <button
+        class="increment"
+        onClick={() => setCount(count() + 1)}
+        type="button"
+      >
         Clicks: {count()}
       </button>
       <p>
